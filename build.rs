@@ -18,11 +18,13 @@ fn main() {
 
     if let Ok(library) = pkg_config::find_library("libmodbus") {
         // println!("{:?}", library);
-        run_bindgen()
+        run_bindgen("/usr/include/modbus")
     }
 }
 
-fn run_bindgen() {
+fn run_bindgen(include: &str) {
+    let include_path = format!("-I{}", include);
+
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
@@ -34,7 +36,7 @@ fn run_bindgen() {
         // The input header we would like to generate
         // bindings for.
         .header("wrapper.h")
-        .clang_arg("-I/usr/include/modbus")
+        .clang_arg(include_path)
         // Finish the builder and generate the bindings.
         .generate()
         // Unwrap the Result and panic on failure.
